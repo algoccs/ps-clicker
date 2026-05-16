@@ -53,7 +53,8 @@ for i in range(4):
     x += 110
 
 # TEXTO PARA ESTADISTICAS
-point_text = Label(50, 50, 200, 50, COLOR_FONDO)
+point_text = Label(50, 50, 100, 50, COLOR_FONDO)
+timer_text = Label(350, 50, 100, 50, COLOR_FONDO)
 
 wait = 0
 points = 0
@@ -64,10 +65,14 @@ condicion = ''
 while True:
     # Validar si el juego ha finalizado
     if not finish:
+        seg = pygame.time.get_ticks() // 1000
+
         if wait == 0:
             screen.fill(COLOR_FONDO)
             point_text.set_text(f'PUNTAJE: {points}', 30)
-            point_text.draw(10, 10)
+            point_text.draw(0, 0)
+            timer_text.set_text(f'TIEMPO: {seg}', 30)
+            timer_text.draw(0, 0)
 
             wait = 20
             click = randint(0, 3)
@@ -104,6 +109,9 @@ while True:
             finish = True
             condicion = 'victoria'
     # FALTA LA CONDICION DE DERROTA
+        if seg >= 10:
+            finish = True
+            condicion = 'derrota'
 
     else:
         if condicion == 'victoria':
@@ -111,8 +119,10 @@ while True:
             victoria = Label(0, 0, ANCHO, ALTO, GREEN)
             victoria.set_text('GANASTE!', 50, WHITE)
             victoria.draw(150, (ALTO // 2) - 50)
-        elif condicion = 'derrota':
-            # COMPLETAR LA PANTALLA DE DERROTA
+        elif condicion == 'derrota':
+            derrota = Label(0, 0, ANCHO, ALTO, RED)
+            derrota.set_text('PERDISTE!', 50, WHITE)
+            derrota.draw(150, (ALTO // 2) - 50)
 
 
     pygame.display.update()

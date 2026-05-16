@@ -58,41 +58,61 @@ point_text = Label(50, 50, 200, 50, COLOR_FONDO)
 wait = 0
 points = 0
 
+finish = False
+condicion = ''
+
 while True:
-    if wait == 0:
-        screen.fill(COLOR_FONDO)
-        point_text.set_text(f'PUNTAJE: {points}', 30)
-        point_text.draw(10, 10)
+    # Validar si el juego ha finalizado
+    if not finish:
+        if wait == 0:
+            screen.fill(COLOR_FONDO)
+            point_text.set_text(f'PUNTAJE: {points}', 30)
+            point_text.draw(10, 10)
 
-        wait = 20
-        click = randint(0, 3)
-
-        for i in range(4):
-            lista_cards[i].change_color(COLOR_CARD)
-            if i == click:
-                lista_cards[i].draw(15, 30)
-                lista_cards[i].set_border(COLOR_BORDER, 5)
-            else:
-                lista_cards[i].fill()
-    else:
-        wait -= 1
-
-    for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            x, y = event.pos
+            wait = 20
+            click = randint(0, 3)
 
             for i in range(4):
-                if lista_cards[i].is_collide(x, y):
-                    if click == i:
-                        points += 1
-                        lista_cards[i].change_color(GREEN)
-                        lista_cards[i].set_border(COLOR_BORDER, 5)
-                    else:
-                        points -= 1
-                        lista_cards[i].change_color(RED)
-                        lista_cards[i].set_border(COLOR_BORDER, 5)
-                
+                lista_cards[i].change_color(COLOR_CARD)
+                if i == click:
+                    lista_cards[i].draw(15, 30)
+                    lista_cards[i].set_border(COLOR_BORDER, 5)
+                else:
                     lista_cards[i].fill()
+        else:
+            wait -= 1
+
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                x, y = event.pos
+
+                for i in range(4):
+                    if lista_cards[i].is_collide(x, y):
+                        if click == i:
+                            points += 1
+                            lista_cards[i].change_color(GREEN)
+                            lista_cards[i].set_border(COLOR_BORDER, 5)
+                        else:
+                            points -= 1
+                            lista_cards[i].change_color(RED)
+                            lista_cards[i].set_border(COLOR_BORDER, 5)
+                    
+                        lista_cards[i].fill()
+    
+    # CONDICION DE VICTORIA
+        if points >= 1:
+            finish = True
+            condicion = 'victoria'
+    # FALTA LA CONDICION DE DERROTA
+
+    else:
+        if condicion == 'victoria':
+            # RENDERIZAMOS LA IMAGEN DE VICTORIA
+            victoria = Label(0, 0, ANCHO, ALTO, GREEN)
+            victoria.set_text('GANASTE!', 50, WHITE)
+            victoria.draw(150, (ALTO // 2) - 50)
+        elif condicion = 'derrota':
+            # COMPLETAR LA PANTALLA DE DERROTA
 
 
     pygame.display.update()
